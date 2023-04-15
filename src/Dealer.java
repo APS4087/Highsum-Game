@@ -22,6 +22,7 @@ public class Dealer extends Player{
         int dealerBet = random.nextInt(1,100);
         return dealerBet;
     }
+
     //think of more actions the dealer need to do
     //conduct the game and implements the methods
     public static void main(String[] args) {

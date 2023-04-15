@@ -1,3 +1,4 @@
+import javax.print.DocFlavor;
 import java.awt.desktop.SystemEventListener;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -21,12 +22,16 @@ public class Player extends User{
         this.chips+=amount;   //need error check
         }
     }
-    public void deductChips(int amount){
-        if(amount<0){
-            System.out.println("Invalid chips amount");
+
+    public boolean deductChips(int amount) {
+        if (getChips() >= amount) {
+            chips -= amount;
+            return true;
         }else {
-            this.chips -= amount;
-        }                           //need error check
+
+            System.out.println("Do not have enought chips to make this bet.");
+            return false;
+        }
     }
 
     //adding card to player hand
@@ -75,19 +80,24 @@ public class Player extends User{
     }
 
     // get the value of card e.g.(Ace,1,2,Queen)
-    public int getCardValue(ArrayList<Card> hand,int i){
+    public int getCardValue(ArrayList<Card> hand,int index){
         int intValueOfCard =0;
         if(hand.size()<2){
             throw new IllegalArgumentException("Two cards are needed in hand");
         }
-        Card cardToCheck = hand.get(i);
+        Card cardToCheck = hand.get(index);
         String stringValueOfCard = cardToCheck.getName();
 
         if(stringValueOfCard.equals("Ace")){
             intValueOfCard = 1;
-        }else if ("Jack Queen King".contains(stringValueOfCard)) {
-            intValueOfCard = 10;
-        }else {
+        }else if (stringValueOfCard.equals("Jack")) {
+            intValueOfCard = 11;
+        }else if (stringValueOfCard.equals("Queen")) {
+            intValueOfCard = 12;
+        }else if (stringValueOfCard.equals("King")) {
+            intValueOfCard = 13;
+        }
+        else {
             intValueOfCard = Integer.parseInt(stringValueOfCard);
         }
         return intValueOfCard;
@@ -95,7 +105,7 @@ public class Player extends User{
 
     // getting the rank of suit
     public int getSuitRank(ArrayList<Card> hand, int i) {
-        int suitRankValue =0;
+        int suitRankValue;
         if(hand.size()<2){
             throw new IllegalArgumentException("Two cards are needed in hand");
         }
@@ -115,8 +125,15 @@ public class Player extends User{
         return suitRankValue;
     }
 
-    //think of a few more method that a player need
-    //to play the game
+    /*
+    public int hasEnoughChips(int betAmount){
+        if(getChips()>=betAmount){
+            return betAmount;
+        }else {
+            System.out.println("You do not have enough chi");
+        }
+    }
+*/
 
     public int playerCallBet() {
         boolean validBet = false;
@@ -125,8 +142,10 @@ public class Player extends User{
             System.out.print("\nEnter bet amount: ");
             try {
                 betAmount = Integer.parseInt(scan.nextLine());
-                if (betAmount <= 0 || betAmount > getChips()) {
+                if (betAmount <= 0) {
                     System.out.println("Invalid bet amount. Please enter a number between 1 and " + getChips() + ".");
+                } else if (betAmount > getChips()) {
+                    System.out.println("Invalid bet amount. You do no have enough bet amount.");
                 } else {
                     validBet = true;
                 }

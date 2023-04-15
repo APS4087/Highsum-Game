@@ -11,7 +11,7 @@ public class Deck {
         for(String suit: suits){
             Card aceCard = new Card(suit,"Ace",1);
             cards.add(aceCard);
-            for (int i =2; i<10;i++){
+            for (int i =2; i<=10;i++){
                 Card card = new Card(suit,i+"",i);
                 cards.add(card);
             }
@@ -80,12 +80,7 @@ public class Deck {
 
 
         System.out.println();
-        ArrayList<Card> cards = new ArrayList<>();
-        cards.add(card1);
-        cards.add(card2);
-        cards.add(card3);
 
-        deck.appendCard(cards);
         deck.showCards();
     }
 }
