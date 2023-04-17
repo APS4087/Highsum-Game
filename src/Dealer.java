@@ -18,8 +18,10 @@ public class Dealer extends Player{
     }
 
     public int dealerCallBet(){
-        Random random = new Random();
-        int dealerBet = random.nextInt(1,100);
+        // assignment 1 dealer only bet 10 chips each round
+        //Random random = new Random();
+        //int dealerBet = random.nextInt(1,100);
+        int dealerBet = 10;
         return dealerBet;
     }
 
