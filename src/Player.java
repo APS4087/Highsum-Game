@@ -34,6 +34,10 @@ public class Player extends User{
         }
     }
 
+    public void setChips(int chips) {
+        this.chips = chips;
+    }
+
     //adding card to player hand
     public void addCards(Card card){
         this.cardsOnHand.add(card);

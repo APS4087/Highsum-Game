@@ -65,8 +65,6 @@ public class GameModule {
                             return true;
 
                         } else if (answerByUser == 'N') {
-
-                            gameEnd();
                             loop = false;
                             return false;
                         } else {
@@ -100,8 +98,6 @@ public class GameModule {
                         } else if (answerByUser=='Q') {
 
                             validAnswer = true;
-
-                            gameEnd();
                             loop = false;
                             return false;
                         } else {
@@ -299,10 +295,12 @@ public class GameModule {
 
                         } else {
                             play = false;
+                            game = false;
                         }
 
                     } else {
                         play = false;
+                        game = false;
                     }
 
 
@@ -316,7 +314,7 @@ public class GameModule {
                         scan.nextLine();
                         if (answerByUser == 'Y') {
                             validAnswer = true;
-                            game = false;
+                            //game = false;
                             play = true;
                             break;
                         } else if (answerByUser == 'N') {
@@ -333,6 +331,11 @@ public class GameModule {
                         scan.nextLine();
                     }
                 }
+                // setting the player chips back to 100
+                player.setChips(100);
+                // No need to save player chips balance in assignment 1
+                // Refreshing pot
+                pot =0;
 
 
             }
