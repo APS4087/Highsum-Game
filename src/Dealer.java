@@ -1,8 +1,10 @@
-import java.util.Random;
+import java.util.ArrayList;
+
 
 public class Dealer extends Player{
 
-    private Deck deck ;
+
+    private final Deck deck ;
     public Dealer(){
         super("Dealer","",0);
         deck = new Deck();
@@ -17,12 +19,16 @@ public class Dealer extends Player{
         player.addCards(card);
     }
 
+    public void addCardsBackToDeck(ArrayList<Card> cardsOnHand){
+        deck.appendCard(cardsOnHand);
+    }
     public int dealerCallBet(){
-        // assignment 1 dealer only bet 10 chips each round
+
+
         //Random random = new Random();
         //int dealerBet = random.nextInt(1,100);
-        int dealerBet = 10;
-        return dealerBet;
+        // assignment 1 dealer only bet 10 chips each round
+        return 10;
     }
 
     //think of more actions the dealer need to do

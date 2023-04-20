@@ -1,7 +1,7 @@
 public class User {
 
-    private String loginName;
-    private String password; //temp plain password
+    private final String loginName;
+    private final String password; //temp plain password
 
     public User(String loginName, String password){
         this.loginName= loginName;

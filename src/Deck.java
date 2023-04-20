@@ -2,17 +2,17 @@
 import java.util.*;
 public class Deck {
 
-    private ArrayList<Card> cards;
+    private final ArrayList<Card> cards;
 
     //method to create the deck
     public Deck(){
-        cards = new ArrayList<Card>();
+        cards = new ArrayList<>();
         String[] suits = {"Spades","Hearts","Clubs","Diamonds"};
         for(String suit: suits){
             Card aceCard = new Card(suit,"Ace",1);
             cards.add(aceCard);
             for (int i =2; i<=10;i++){
-                Card card = new Card(suit,i+"",i);
+                Card card = new Card(suit, String.valueOf(i),i);
                 cards.add(card);
             }
             String[] pictureCards ={"Jack","Queen","King"};
@@ -58,29 +58,5 @@ public class Deck {
         for (Card card:cards){
             appendCard(card);
         }
-    }
-
-    //testing deck class
-    public static void main(String[] args) {
-        Deck deck = new Deck();
-        //deck.shuffle();
-
-        //deck.showCards();
-        Card card1 =deck.dealCard();
-        Card card2 =deck.dealCard();
-        Card card3 =deck.dealCard();
-
-        /*
-        System.out.println(card1);
-        System.out.println(card2);
-        System.out.println(card3);
-        System.out.println();
-        deck.showCards();
-        */
-
-
-        System.out.println();
-
-        deck.showCards();
     }
 }

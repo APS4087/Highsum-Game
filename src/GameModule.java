@@ -1,15 +1,13 @@
-import java.util.*;
 
+import java.util.*;
 public class GameModule {
 
     static Scanner scan = new Scanner(System.in);
-    private Dealer dealer;
-    private Player player;
+    private final Dealer dealer;
+    private final Player player;
     private static String loginName;
     private static String password;
     private int betAmount;
-    private int dealerBetAmount;
-    private int totalBetAmount;
     private int pot;
     private String wonBy;
     private char answerByUser;
@@ -18,25 +16,26 @@ public class GameModule {
     public GameModule(String loginName, String password) {
         dealer = new Dealer();
         player = new Player(loginName, password, 100);
-
     }
 
-    // place to store all the bet
+    // place to store all the bet chips
     public void addToPot(int chips){
         pot+=chips;
     }
 
+    // Method to end game
     public void gameEnd(){
         System.out.println("Thanks for playing the game...");
         System.out.println(loginName+", You are left with  "+player.getChips()+" chips.");
         play = false;
     }
+
     // method that does the automations of betting
     public boolean betAutomation(int playerCard, int dealerCard, int playerSuit, int dealerSuit) {
         wonBy = showWhoWon(playerCard, dealerCard, playerSuit, dealerSuit);
         if (wonBy.equalsIgnoreCase("dealer")) {      //ignore all case
             // Dealer won
-            System.out.println();
+
             System.out.println("Dealer Call");
             betAmount = dealer.dealerCallBet();
             System.out.println("State bet: " + betAmount);
@@ -51,8 +50,7 @@ public class GameModule {
                         answerByUser = scan.next().toUpperCase().charAt(0);     // take only the first char no matter what the user want to enter
                         scan.nextLine();
                         if (answerByUser == 'Y') {
-
-                            if (!(player.deductChips(betAmount))) {         // if player don't have enough chips and don't want to all in
+                            if (!(player.deductChips(betAmount))) {         // if player don't have enough chips
                                 System.out.println();
                                 validAnswer = true;
                                 gameEnd();
@@ -63,7 +61,6 @@ public class GameModule {
                             validAnswer = true;
                             loop = false;
                             return true;
-
                         } else if (answerByUser == 'N') {
                             loop = false;
                             return false;
@@ -78,13 +75,13 @@ public class GameModule {
             }
         } else if (wonBy.equalsIgnoreCase("player")) {
             // Player won
-            System.out.println();
+            System.out.println("Player Call");
             //loop to ask if player want to call or quit
             boolean loop = true;
             while (loop){
                 boolean validAnswer = false;
                 while(!validAnswer){
-                    System.out.println("Do you want to call or quit? [C/Q] : ");
+                    System.out.print("\nDo you want to call or quit? [C/Q] : ");
                     try{
                         answerByUser = scan.next().toUpperCase().charAt(0);
                         scan.nextLine();
@@ -112,6 +109,8 @@ public class GameModule {
 
         }return true;
     }
+
+    // Method that shows who won
     public String showWhoWon(int playerCard, int dealerCard, int playerSuit, int dealerSuit){
         if(playerCard>dealerCard){
             return "player";
@@ -132,27 +131,36 @@ public class GameModule {
             }
         }
     }
-
-    public void run(){
+    // deal and show the cards with hidden for dealer
+    public void dealCardAndShow(Player player, Dealer dealer){
+        // Dealer deals cards
+        dealer.dealCardTo(player);
+        dealer.dealCardTo(dealer);
+        // Show cards
+        dealer.showCardsOnHandWithHidden();
         System.out.println();
-        System.out.println("Highsum Game!");
-        System.out.println("================================================================");
-        System.out.println(loginName+", You have "+player.getChips()+" chips.");
-        System.out.println("----------------------------------------------------------------");
+        player.revealAllCardsOnHand();
+        player.showTotalCardsValue();
+    }
 
+    // Run method
+    public void run(){
          //if player quit set to false
         play = true;
         boolean game = true;
-        dealer.shuffle();
-
-
         while (game) {
-
             while (play) {
 
-
+                System.out.println();
+                System.out.println("Highsum Game!");
+                System.out.println("================================================================");
+                System.out.println(loginName+", You have "+player.getChips()+" chips.");
+                System.out.println("----------------------------------------------------------------");
+                System.out.print("Game starts - ");
+                dealer.shuffle();
                 // ROUND 1
-                System.out.println("Round 1 ");
+                System.out.println("----------------------------------------------------------------");
+                System.out.println("Dealer dealing cards - Round 1 ");
                 System.out.println("----------------------------------------------------------------");
                 // Dealer two cards in round 1
                 dealer.dealCardTo(player);
@@ -164,45 +172,38 @@ public class GameModule {
                 System.out.println();
                 player.revealAllCardsOnHand();
                 player.showTotalCardsValue();
-
                 // Getting the card value to compare
                 int playerSecondCardValue = player.getCardValue(player.getCardsOnHand(), 1);
                 int dealerSecondCardValue = player.getCardValue(dealer.getCardsOnHand(), 1);
                 int playerSecondSuitValue = player.getSuitRank(player.getCardsOnHand(), 1);
                 int dealerSecondSuitValue = player.getSuitRank(dealer.getCardsOnHand(), 1);
 
-
                 wonBy = showWhoWon(playerSecondCardValue, dealerSecondCardValue, playerSecondSuitValue, dealerSecondSuitValue);
-
                 if (wonBy.equalsIgnoreCase("player")) {
-                    System.out.println("Player call,");
+                    System.out.print("Player call, ");
                     betAmount = player.playerCallBet();
-
-
                 } else if (wonBy.equalsIgnoreCase("dealer")) {
-                    System.out.println("Dealer call,");
+                    System.out.print("Dealer call, ");
                     betAmount = dealer.dealerCallBet();
-
                 } else if (wonBy.equalsIgnoreCase("tie")) {
                     System.out.println("Its a tie");
                     System.out.println("Nobody call");
                 }
-                //dealer bet amount same as bet amount
 
-                dealerBetAmount = betAmount;
+                //dealer bet amount same as bet amount
+                int dealerBetAmount = betAmount;
                 System.out.println("State bet: " + betAmount);
-                player.deductChips(betAmount);   // Don't need to deduct chips from dealer
-                totalBetAmount = betAmount + dealerBetAmount;
+                player.deductChips(betAmount);                           // Don't need to deduct chips from dealer
+                int totalBetAmount = betAmount + dealerBetAmount;
                 addToPot(totalBetAmount);
 
                 System.out.println(loginName + ", You are left with  " + player.getChips() + " chips.");
-
                 System.out.println("Bet on table : " + pot);
-
 
                 // ROUND 2
                 System.out.println();
-                System.out.println("Round 2 ");
+                System.out.println("----------------------------------------------------------------");
+                System.out.println("Dealer dealing cards - Round 2 ");
                 System.out.println("----------------------------------------------------------------");
 
                 dealCardAndShow(player, dealer);
@@ -224,7 +225,8 @@ public class GameModule {
 
                     // ROUND 3
                     System.out.println();
-                    System.out.println("Round 3 ");
+                    System.out.println("----------------------------------------------------------------");
+                    System.out.println("Dealer dealing cards - Round 3 ");
                     System.out.println("----------------------------------------------------------------");
                     // Dealer deal cards
                     dealCardAndShow(player, dealer);
@@ -244,6 +246,8 @@ public class GameModule {
                         System.out.println("Bet on table : " + pot);
 
                         // ROUND 4
+                        System.out.println();
+                        System.out.println("----------------------------------------------------------------");
                         System.out.println("Dealer dealing cards - Round 4");
                         System.out.println("----------------------------------------------------------------");
 
@@ -264,12 +268,14 @@ public class GameModule {
                             System.out.println("Bet on table : " + pot);
 
                             // END GAME RESULTS
+                            System.out.println();
+                            System.out.println("----------------------------------------------------------------");
                             System.out.println("Game End - Dealer reveals hidden cards");
                             System.out.println("----------------------------------------------------------------");
 
-                            dealer.revealAllCardsOnHand();
+                            dealer.revealAllCardsOnHand();   // Dealer reveals all cards on hand
                             dealer.showTotalCardsValue();
-                            System.out.println();
+
                             player.revealAllCardsOnHand();
                             player.showTotalCardsValue();
 
@@ -288,22 +294,13 @@ public class GameModule {
                                 System.out.println("The game is a tie!");
 
                             }
-
                             System.out.println("Dealer shuffles used cards and place behind the deck.");
-
-
-
                         } else {
-                            play = false;
                             game = false;
                         }
-
                     } else {
-                        play = false;
                         game = false;
                     }
-
-
                 }
                 play = false;
                 boolean validAnswer = false;
@@ -313,6 +310,8 @@ public class GameModule {
                         answerByUser = scan.next().toUpperCase().charAt(0);     // take only the first char no matter what the user want to enter
                         scan.nextLine();
                         if (answerByUser == 'Y') {
+
+
                             validAnswer = true;
                             //game = false;
                             play = true;
@@ -331,40 +330,44 @@ public class GameModule {
                         scan.nextLine();
                     }
                 }
+                // Adding the games back to deck
+                dealer.addCardsBackToDeck(player.getCardsOnHand());
+                dealer.addCardsBackToDeck(dealer.getCardsOnHand());
+
                 // setting the player chips back to 100
                 player.setChips(100);
                 // No need to save player chips balance in assignment 1
                 // Refreshing pot
                 pot =0;
-
-
             }
         }
     }
 
-    public void dealCardAndShow(Player player, Dealer dealer){
-        // Dealer deals cards
-        dealer.dealCardTo(player);
-        dealer.dealCardTo(dealer);
-        // Show cards
-        dealer.showCardsOnHandWithHidden();
-        System.out.println();
-        player.revealAllCardsOnHand();
-        player.showTotalCardsValue();
-    }
+    // Main method
     public static void main(String[] args) {
         System.out.println("HighSum Game");
         System.out.println("================================================================");
         System.out.println();
+
+        // Simple login check
+        loginName = "Icepeak";   // Hardcoding login name and password for assignment 1
+        password = "password";
+
         System.out.print("Enter Login Name: ");
-        loginName = scan.next();
+        String enteredName = scan.next();
         scan.nextLine();
         System.out.print("Enter password: ");
-        password = scan.next();
+        String enteredPassword = scan.next();
         scan.nextLine();
-        GameModule app = new GameModule(loginName,password);
 
-
-        app.run();
+        if (enteredName.equals(loginName) && enteredPassword.equals(password)) {
+            System.out.println("Login successful!");
+            System.out.println();
+            GameModule app = new GameModule(loginName, password);
+            app.run();
+        }else {
+            System.out.println("Unsuccessful login to game!");
+            System.out.println();
+        }
     }
 }

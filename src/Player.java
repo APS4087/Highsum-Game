@@ -1,17 +1,16 @@
-import javax.print.DocFlavor;
-import java.awt.desktop.SystemEventListener;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Player extends User{
     private int chips;
-    private ArrayList<Card> cardsOnHand;
+    private final ArrayList<Card> cardsOnHand;
     static Scanner scan = new Scanner(System.in);
 
     public Player(String loginName, String password, int chips){
         super(loginName,password);
         this.chips = chips;
-        this.cardsOnHand = new ArrayList<Card>();
+        this.cardsOnHand = new ArrayList<>();
     }
 
     public void addChips(int amount){
@@ -19,7 +18,7 @@ public class Player extends User{
             System.out.println("Invalid chips amount");
         }
         else{
-        this.chips+=amount;   //need error check
+        this.chips+=amount;
         }
     }
 
@@ -28,8 +27,7 @@ public class Player extends User{
             chips -= amount;
             return true;
         }else {
-
-            System.out.println("Do not have enought chips to make this bet.");
+            System.out.println("Do not have enough chips to make this bet.");
             return false;
         }
     }
@@ -68,6 +66,7 @@ public class Player extends User{
         return this.chips;
     }
 
+    // return total value of cards on hand
     public int getTotalCardsValue(){
         int total = 0;
         for(Card card:cardsOnHand){
@@ -75,8 +74,11 @@ public class Player extends User{
         }
         return total;
     }
+
+    // method to show total value of cards
     public void showTotalCardsValue(){
         System.out.println("Value: "+getTotalCardsValue());
+        System.out.println();
     }
 
     public ArrayList<Card> getCardsOnHand() {
@@ -85,25 +87,20 @@ public class Player extends User{
 
     // get the value of card e.g.(Ace,1,2,Queen)
     public int getCardValue(ArrayList<Card> hand,int index){
-        int intValueOfCard =0;
+        int intValueOfCard ;
         if(hand.size()<2){
             throw new IllegalArgumentException("Two cards are needed in hand");
         }
         Card cardToCheck = hand.get(index);
         String stringValueOfCard = cardToCheck.getName();
-
-        if(stringValueOfCard.equals("Ace")){
-            intValueOfCard = 1;
-        }else if (stringValueOfCard.equals("Jack")) {
-            intValueOfCard = 11;
-        }else if (stringValueOfCard.equals("Queen")) {
-            intValueOfCard = 12;
-        }else if (stringValueOfCard.equals("King")) {
-            intValueOfCard = 13;
-        }
-        else {
-            intValueOfCard = Integer.parseInt(stringValueOfCard);
-        }
+        // Using switch case to assign temp numbers to cards to compare
+        intValueOfCard = switch (stringValueOfCard) {
+            case "Ace" -> 1;
+            case "Jack" -> 11;
+            case "Queen" -> 12;
+            case "King" -> 13;             // Giving King the highest temp value
+            default -> Integer.parseInt(stringValueOfCard);
+        };
         return intValueOfCard;
     }
 
@@ -115,35 +112,23 @@ public class Player extends User{
         }
         Card cardToCheck = hand.get(i);
         String cardRankString = cardToCheck.getSuit();
-        if(cardRankString.equals("Spades")){          // Giving spades the highest value
-            suitRankValue = 4;
-        }else if(cardRankString.equals("Hearts")){
-            suitRankValue = 3 ;
-        } else if (cardRankString.equals("Clubs")) {
-            suitRankValue = 2 ;
-        }else if (cardRankString.equals("Diamonds")){
-            suitRankValue = 1 ;
-        }else {
-            throw new IllegalArgumentException("Invalid error!");
-        }
+        // Using switch case to assign temp numbers to cards to compare
+        suitRankValue = switch (cardRankString) {
+            case "Spades" -> 4;                           // Giving spades the highest value
+            case "Hearts" -> 3;
+            case "Clubs" -> 2;
+            case "Diamonds" -> 1;
+            default -> throw new IllegalArgumentException("Invalid error!");
+        };
         return suitRankValue;
     }
 
-    /*
-    public int hasEnoughChips(int betAmount){
-        if(getChips()>=betAmount){
-            return betAmount;
-        }else {
-            System.out.println("You do not have enough chi");
-        }
-    }
-*/
-
+    // method that check the player bet
     public int playerCallBet() {
         boolean validBet = false;
         int betAmount=0;
         while (!validBet) {
-            System.out.print("\nEnter bet amount: ");
+            System.out.print("Enter bet amount: ");
             try {
                 betAmount = Integer.parseInt(scan.nextLine());
                 if (betAmount <= 0) {
@@ -159,6 +144,7 @@ public class Player extends User{
         }return betAmount;
     }
 
+    // Test method for this class
     public static void main(String[] args) {
         Player player = new Player("IcePeak","password",100);
 
