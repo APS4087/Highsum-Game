@@ -352,22 +352,29 @@ public class GameModule {
         // Simple login check
         loginName = "Icepeak";   // Hardcoding login name and password for assignment 1
         password = "password";
+        boolean logIn = false;
 
-        System.out.print("Enter Login Name: ");
-        String enteredName = scan.next();
-        scan.nextLine();
-        System.out.print("Enter password: ");
-        String enteredPassword = scan.next();
-        scan.nextLine();
+        do {
 
-        if (enteredName.equals(loginName) && enteredPassword.equals(password)) {
-            System.out.println("Login successful!");
-            System.out.println();
-            GameModule app = new GameModule(loginName, password);
-            app.run();
-        }else {
-            System.out.println("Unsuccessful login to game!");
-            System.out.println();
-        }
+            System.out.print("Enter Login Name: ");
+            String enteredName = scan.next();
+            scan.nextLine();
+            System.out.print("Enter password: ");
+            String enteredPassword = scan.next();
+            scan.nextLine();
+
+
+            if (enteredName.equals(loginName) && enteredPassword.equals(password)) {
+                System.out.println("Login successful!");
+                logIn = true;
+                System.out.println();
+                GameModule app = new GameModule(loginName, password);
+                app.run();
+            } else {
+                System.out.println("Unsuccessful login to game!");
+                System.out.println();
+            }
+        }while (!logIn);
+        scan.close();
     }
 }
