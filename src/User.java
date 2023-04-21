@@ -12,6 +12,7 @@ public class User {
         return loginName;
     }
 
+    // temp not using this method
     public boolean checkPassword(String password){
         return this.password.equals(password);
     }

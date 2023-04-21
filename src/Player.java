@@ -144,22 +144,4 @@ public class Player extends User{
         }return betAmount;
     }
 
-    // Test method for this class
-    public static void main(String[] args) {
-        Player player = new Player("IcePeak","password",100);
-
-        Deck deck = new Deck();
-        deck.shuffle();
-
-        Card card1 = deck.dealCard();
-        Card card2 = deck.dealCard();
-
-        player.addCards(card1);
-        player.addCards(card2);
-        player.showCardsOnHandWithHidden();
-        player.showTotalCardsValue();
-        ArrayList<Card> cards = player.getCardsOnHand();
-        deck.appendCard(cards);
-        deck.showCards();
-    }
 }

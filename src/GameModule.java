@@ -310,8 +310,16 @@ public class GameModule {
                         answerByUser = scan.next().toUpperCase().charAt(0);     // take only the first char no matter what the user want to enter
                         scan.nextLine();
                         if (answerByUser == 'Y') {
-
-
+                            // Adding cards back to deck
+                            dealer.addCardsBackToDeck(player.getCardsOnHand());
+                            dealer.addCardsBackToDeck(dealer.getCardsOnHand());
+                            player.getCardsOnHand().clear();        // Clearing the arraylist
+                            dealer.getCardsOnHand().clear();
+                            // setting the player chips back to 100
+                            player.setChips(100);
+                            // No need to save player chips balance in assignment 1
+                            // Refreshing pot
+                            pot =0;
                             validAnswer = true;
                             //game = false;
                             play = true;
@@ -331,14 +339,7 @@ public class GameModule {
                     }
                 }
                 // Adding the games back to deck
-                dealer.addCardsBackToDeck(player.getCardsOnHand());
-                dealer.addCardsBackToDeck(dealer.getCardsOnHand());
 
-                // setting the player chips back to 100
-                player.setChips(100);
-                // No need to save player chips balance in assignment 1
-                // Refreshing pot
-                pot =0;
             }
         }
     }

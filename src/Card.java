@@ -26,10 +26,4 @@ public class Card {
         return "<"+this.suit+" "+this.name+">";
     }
 
-    public static void main(String[] args) {
-        Card card = new  Card("Heart","Ace",1);
-        System.out.println(card);
-        System.out.println(card.getValue());
-
-    }
 }
