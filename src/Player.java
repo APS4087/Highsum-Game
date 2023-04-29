@@ -1,17 +1,40 @@
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
-public class Player extends User{
+public class Player extends User implements Serializable{
     private int chips;
-    private final ArrayList<Card> cardsOnHand;
+    private final ArrayList<Card> cardsOnHand = new ArrayList<>();
     static Scanner scan = new Scanner(System.in);
 
-    public Player(String loginName, String password, int chips){
-        super(loginName,password);
+
+    public Player(String loginName, String haashedPassword, int chips){
+        super(loginName,haashedPassword);
         this.chips = chips;
-        this.cardsOnHand = new ArrayList<>();
     }
+
+    public static List<Player> getAllPlayers() {
+        List<Player> players = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("players.bin"))) {
+            while (true) {
+                try {
+                    Player player = (Player) ois.readObject();
+                    players.add(player);
+                } catch (EOFException e) {
+                    break;
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("An error occurred while trying to load player data.");
+            e.printStackTrace();
+        }
+        return players;
+    }
+
+
 
     public void addChips(int amount){
         if(amount<0){
@@ -143,5 +166,6 @@ public class Player extends User{
             }
         }return betAmount;
     }
+
 
 }
