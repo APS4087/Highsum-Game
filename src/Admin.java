@@ -1,9 +1,8 @@
 
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -13,15 +12,7 @@ public class Admin {
 
     private static final String ADMIN_PASSWORD_FILE_PATH = "admin.txt";
     private static final String PLAYERS_FILE_PATH = "players.bin";
-    private static final String DEFAULT_NAME_ADMIN = "Admin";
-    private String username;
-    private String hashPW;
-    private ArrayList<Player> players ;
     private final Scanner scan = new Scanner(System.in);
-
-
-
-
 
     // hashing password
     public String passwordHash(String base)
@@ -132,7 +123,7 @@ public class Admin {
         List<Player> players = Player.getAllPlayers();
         players.add(new Player(loginName,hashedPW,chips));
 
-
+        System.out.println("Player \""+loginName+"\" has been created....");
         // Saving player obj to bin file
         writePlayersToFile(players,PLAYERS_FILE_PATH);
     }
@@ -209,14 +200,26 @@ public class Admin {
             Player player = iterator.next();
             String loginName = player.getLoginName();
             int chipsPlayerHave = player.getChips();
-            if (playerToIssueChips.equals(loginName)) { // Making it case sensitive
+            if (playerToIssueChips.equals(loginName)) { // Making it case-sensitive
                 System.out.println("Player available to issue chips....");
-                System.out.print("Enter the amount of chips to issue: ");
-                int chipsToIssue = scan.nextInt();
-                scan.nextLine();
-                chipsPlayerHave+=chipsToIssue;
+                int chipsToIssue;
+                do {
+                    try {
+                        System.out.print("Enter the amount of chips to issue: ");
+                        chipsToIssue = scan.nextInt();
+                        scan.nextLine();
+                        if (chipsToIssue < 0) {
+                            System.out.println("Chips amount must be >= 0. Please try again.");
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input. Please enter a valid integer.");
+                        scan.nextLine(); // clear the scanner buffer
+                        chipsToIssue = -1; // set to an invalid value to trigger another iteration of the loop
+                    }
+                } while (chipsToIssue < 0);
+                chipsPlayerHave += chipsToIssue;
                 player.setChips(chipsPlayerHave);
-                System.out.println(chipsToIssue+" chips have been added to player \""+player.getLoginName()+"\"");
+                System.out.println(chipsToIssue + " chips have been added to player \"" + player.getLoginName() + "\"");
                 playerFound = true;
                 break;
             }
