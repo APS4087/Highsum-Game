@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.TimerTask;
 
+// Main game GUI
 public class MainGameFrame extends JFrame {
 
     CardPanel cardPanel;

@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
+// Panel that display the cards
 public class CardPanel extends JPanel {
     private Player player;
     private Dealer dealer;

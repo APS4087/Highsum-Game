@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
+// Panel that shows the deck and chips on table
 public class GameDetailsPanel extends JPanel {
 
     private ImageIcon deckIcon;

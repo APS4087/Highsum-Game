@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
+// Panel that display the player's card value and chips
 public class PlayerDetailsPanel extends JPanel {
     private Player player;
 

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.AccessFlag;
 import java.util.Scanner;
 
+// ** MAIN MENU TO RUN **
 public class MainMenu extends JFrame implements ActionListener {
 
     private JLabel titleLabel;

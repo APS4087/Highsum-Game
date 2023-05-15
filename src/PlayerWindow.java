@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+// GUI player login window
 public class PlayerWindow extends JFrame implements ActionListener {
 
     private JLabel titleLabel;
