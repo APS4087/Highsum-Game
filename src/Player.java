@@ -104,6 +104,7 @@ public class Player extends User implements Serializable{
         System.out.println();
     }
 
+
     public ArrayList<Card> getCardsOnHand() {
         return cardsOnHand;
     }

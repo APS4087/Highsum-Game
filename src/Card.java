@@ -1,9 +1,12 @@
-public class Card {
+import javax.swing.*;
+
+public class Card extends ImageIcon {
     private final String suit;
     private final String name;
     private final int value;
 
     public Card(String suit, String name , int value){
+        super("cards/"+name+"_of_"+suit+".png");
         this.suit = suit;
         this.name= name;
         this.value = value;

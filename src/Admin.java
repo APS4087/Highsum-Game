@@ -1,4 +1,6 @@
 
+import com.sun.tools.javac.Main;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,6 +15,7 @@ public class Admin {
     private static final String ADMIN_PASSWORD_FILE_PATH = "admin.txt";
     private static final String PLAYERS_FILE_PATH = "players.bin";
     private final Scanner scan = new Scanner(System.in);
+    private MainMenu mainMenu;
 
     // hashing password
     public String passwordHash(String base)
@@ -84,7 +87,7 @@ public class Admin {
             System.out.println("4. Issue more chips to a player");
             System.out.println("5. Reset player’s password");
             System.out.println("6. Change administrator’s password");
-            System.out.println("7. Logout");
+            System.out.println("7. Logout and go back to Main Menu");
             System.out.println();
             System.out.print("Please select an option: ");
             input = scan.nextLine();
@@ -98,7 +101,7 @@ public class Admin {
                     case 4 -> issueChipsToPlayer();
                     case 5 -> resetPlayerPW();
                     case 6 -> changeAdminPW();
-                    case 7 -> logout();
+                    case 7 -> new MainMenu();
 
                     default -> System.out.println("Invalid input. Please try again.");
                 }

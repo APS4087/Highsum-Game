@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.AccessFlag;
+import java.util.Scanner;
 
 public class MainMenu extends JFrame implements ActionListener {
 
@@ -58,13 +60,35 @@ public class MainMenu extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==adminButton){
-            System.out.println("Going to admin page");
+            // Currently admin function be accessed by console only
+            Scanner scan = new Scanner(System.in);
+            Admin ad = new Admin();
+            dispose();
+            JOptionPane.showMessageDialog(null,"Please proceed to console to access admin functions.");
+            System.out.println("--------Welcome to admin portal---------");
+            boolean logIn = false;
+            do {
+                System.out.print("Enter password: ");
+                String password = scan.next();
+                scan.nextLine();
+
+                if (ad.checkAdminLogin(password)) {
+                    System.out.println("Login approved.....");
+                    logIn = true;
+                } else {
+                    System.out.println("Incorrect admin password");
+                    System.out.println();
+                }
+            } while (!logIn);
+
+            ad.adminMenu();
+
 
         }
         if (e.getSource()==playerButton){
             System.out.println("Going to player page");
             dispose();
-            PlayerWindow playerWindow = new PlayerWindow();
+            new PlayerWindow();
         }
     }
 }
