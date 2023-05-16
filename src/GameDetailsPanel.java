@@ -18,10 +18,10 @@ public class GameDetailsPanel extends JPanel {
 
         // panel to store deck image
         deckImagePanel = new JPanel();
-        ImageIcon originalDeckIcon = new ImageIcon("cardDeck.jpg");
+        ImageIcon originalDeckIcon = new ImageIcon("cardDeck.png");
         // Resizing image
         Image originalDeckIconImage = originalDeckIcon.getImage();
-        Image resizedDeckIconImage = originalDeckIconImage.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        Image resizedDeckIconImage = originalDeckIconImage.getScaledInstance(90, 120, Image.SCALE_SMOOTH);
         deckIcon = new ImageIcon(resizedDeckIconImage);
 
         // Adding the icon to deckImagePanel
@@ -38,13 +38,13 @@ public class GameDetailsPanel extends JPanel {
                 super.paintComponent(g);
 
                 // draw chips icon and chips count
-                ImageIcon originalChipsIcon = new ImageIcon("chipsImg.jpg");
+                ImageIcon originalChipsIcon = new ImageIcon("chipImg.png");
                 Image originalChipsIconImg = originalChipsIcon.getImage();
-                Image resizedChipsIconImg = originalChipsIconImg.getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+                Image resizedChipsIconImg = originalChipsIconImg.getScaledInstance(80, 90, Image.SCALE_SMOOTH);
                 ImageIcon chipsIcon = new ImageIcon(resizedChipsIconImg);
                 String chipsCount = "Chips on table: " + chipsOnTable;
 
-                g.drawImage(chipsIcon.getImage(), 0, 0, 70, 70, null);
+                g.drawImage(chipsIcon.getImage(), 0, 0, 80, 80, null);
                 g.setFont(new Font("Arial", Font.PLAIN, 15));
                 g.setColor(Color.lightGray);
                 g.drawString(chipsCount, 80, 40);

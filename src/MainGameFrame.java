@@ -1,10 +1,8 @@
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.TimerTask;
+import java.util.List;
+
 
 // Main game GUI
 public class MainGameFrame extends JFrame {
@@ -16,9 +14,7 @@ public class MainGameFrame extends JFrame {
     private Dealer dealer;
     private int pot;
     private int betAmount;
-    private String wonBy;
-    private boolean play;
-    public MainGameFrame(){}
+
     public MainGameFrame(Player player, Dealer dealer ) {
         super("HighSum Game");
         this.dealer = dealer;
@@ -68,9 +64,7 @@ public class MainGameFrame extends JFrame {
 
     }
 
-    public int getPot() {
-        return pot;
-    }
+
 
     public void updateGameTable()
     {
@@ -126,47 +120,24 @@ public class MainGameFrame extends JFrame {
     }
 
     public void gameEnd() {
-        JFrame frame = new JFrame();
-        frame.setTitle("Game Over");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
-        frame.setLocationRelativeTo(null);
+        String message = "Thanks for playing the game!\n";
+        String chips = player.getLoginName() + ", you are left with " + player.getChips() + " chips.\n";
+        String dataSaved = "Your data have been saved to file.";
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        JLabel messageLabel = new JLabel("Thanks for playing the game!");
-        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(messageLabel);
-
-        JLabel chipsLabel = new JLabel(player.getLoginName() + ", you are left with " + player.getChips() + " chips.");
-        chipsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(chipsLabel);
-
-        JButton okButton = new JButton("OK");
-        okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-            }
-        });
-        panel.add(okButton);
-
-        frame.add(panel);
-        frame.setVisible(true);
-
-
+        String[] options = {"OK"};
+        JOptionPane.showOptionDialog(null, message + chips + dataSaved, "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     }
+
     public boolean betAutomation(int playerCard, int dealerCard, int playerSuit, int dealerSuit) {
-        wonBy = showWhoWon(playerCard, dealerCard, playerSuit, dealerSuit);
+        String wonBy = showWhoWon(playerCard, dealerCard, playerSuit, dealerSuit);
         if (wonBy.equalsIgnoreCase("dealer")) { // ignore all case
             // Dealer won
             betAmount = 10;  // dealer default bet
-            JOptionPane.showMessageDialog(null, "Dealer Call,\nState bet: " + betAmount);
+            JOptionPane.showMessageDialog(null, "Dealer Call,\nBet amount: " + betAmount);
 
             // Asking player if they want to follow or quit
-            boolean loop = true;
-            while (loop) {
+
+            while (true) {
                 Object[] options = { "Follow", "Quit" };
                 int selectedOption = JOptionPane.showOptionDialog(null, "Do you want to follow?", "Follow or Quit",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
@@ -185,8 +156,8 @@ public class MainGameFrame extends JFrame {
         } else if (wonBy.equalsIgnoreCase("player")) {
             // Player won
             // loop to ask if player want to call or quit
-            boolean loop = true;
-            while (loop) {
+
+            while (true) {
                 Object[] options = { "Call", "Quit" };
                 int selectedOption = JOptionPane.showOptionDialog(null, "Player call,\nDo you want to Call or Quit?","Call or Quit",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
@@ -201,6 +172,24 @@ public class MainGameFrame extends JFrame {
 
         }
         return true;
+    }
+
+    public void savePlayerData(){
+        // Save player back to player.bin <add an option that shows saving to file>
+        int chipLeft = player.getChips();
+        String currentLoginName = player.getLoginName();
+        List<Player> players = Player.getAllPlayers();
+        for (Player player : players) {
+            String loginNameFromList = player.getLoginName();
+            if (currentLoginName.equals(loginNameFromList)) { // Making it case-sensitive
+                player.setChips(chipLeft);
+
+                break;
+
+            }
+        }
+        Admin ad = new Admin();
+        ad.writePlayersToFile(players, "players.bin");
     }
 
 
@@ -239,7 +228,7 @@ public class MainGameFrame extends JFrame {
     public void run() {
 
         welcomeGUI();
-        play = true;
+        boolean play = true;
         boolean game = true;
         while (play) {
             while (game) {
@@ -310,7 +299,7 @@ public class MainGameFrame extends JFrame {
                             // Showing who won
                             gameResult(player,dealer);
 
-                            // Save player back to player.bin <add an option that shows saving to file>
+
 
 
                         }
@@ -323,7 +312,9 @@ public class MainGameFrame extends JFrame {
                     game = false;
                     play = false;
                     gameEnd();
+                    savePlayerData();
                     dispose();
+                    new MainMenu();
                 }else {
                     // User choose to play another game
                     // Adding cards back to deck
@@ -334,8 +325,8 @@ public class MainGameFrame extends JFrame {
                     dealer.getCardsOnHand().clear();
                     // refreshing pot
                     pot = 0;
-                    play = true;
                     cardPanel.setShowAllDealerCards(false);  // Setting the dealer first card to hidden
+
                     updateGameTable();
                     updatePlayerDetails();
                     gameDetailsPanel.setChipsOnTable(pot);

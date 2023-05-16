@@ -10,17 +10,14 @@ import java.util.Iterator;
 // GUI player login window
 public class PlayerWindow extends JFrame implements ActionListener {
 
-    private JLabel titleLabel;
-    private JLabel usernameLabel;
     private JTextField usernameField;
-    private JLabel passwordLabel;
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton resetButton;
     private Dealer dealer = new Dealer();
     ArrayList<Player> players = (ArrayList<Player>) Player.getAllPlayers();
     private JList<String> playersJList;
-    private DefaultListModel<String> playersListModel;
+
 
     Admin ad = new Admin();
     PlayerWindow(){
@@ -29,11 +26,11 @@ public class PlayerWindow extends JFrame implements ActionListener {
         setPreferredSize(new Dimension(500, 400));
 
         // Create components
-        titleLabel = new JLabel("Player Login");
+        JLabel titleLabel = new JLabel("Player Login");
         titleLabel.setFont(new Font("Arial",Font.BOLD,24));
-        usernameLabel = new JLabel("Username:");
+        JLabel usernameLabel = new JLabel("Username:");
         usernameField  = new JTextField(20);
-        passwordLabel = new JLabel("Password:");
+        JLabel passwordLabel = new JLabel("Password:");
         passwordField= new JPasswordField(20);
         loginButton = new JButton("Login");
         loginButton.addActionListener(this);
@@ -41,31 +38,35 @@ public class PlayerWindow extends JFrame implements ActionListener {
         resetButton.addActionListener(this);
 
         // Setting up the Available players
+        String separator = " / ";
         DefaultListModel<String> playersListModel = new DefaultListModel<>();
         for (Player player: players) {
-            playersListModel.addElement(player.getLoginName());
+            playersListModel.addElement(player.getChips()+separator+player.getLoginName());
         }
         playersJList = new JList<>(playersListModel);
         playersJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane playersListScrollPane = new JScrollPane(playersJList);
-        playersListScrollPane.setPreferredSize(new Dimension(150,50));
-        System.out.println(playersListScrollPane.getPreferredSize().height+","+playersListScrollPane.getPreferredSize().width);
-        // Getting the selected player
-        String selectedPlayer = playersJList.getSelectedValue();
+        playersListScrollPane.setPreferredSize(new Dimension(220,60));
+
+        System.out.println(playersListModel);
+
 
         // Autofill to usernameField
-        playersJList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    String selectedPlayer = playersJList.getSelectedValue();
-                    if (selectedPlayer != null) {
-                        usernameField.setText(selectedPlayer);
-                    }
+        // using lambda expression
+        playersJList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                // Getting the selected player
+                String selectedString = playersJList.getSelectedValue();   // Getting only the player name and removing the chips
+                int separatorPosition = selectedString.indexOf(separator);
+                if(separatorPosition==-1){
+                    System.out.println("");
                 }
+                String selectedPlayer = selectedString.substring(separatorPosition+separator.length());
+                usernameField.setText(selectedPlayer);
             }
         });
         // Label
-        JLabel playerListLabel = new JLabel("Available Players:");
+        JLabel playerListLabel = new JLabel("Available chips / Available Players:");
 
         // setting up layout
         // using flexible gridBagLayout
@@ -100,7 +101,7 @@ public class PlayerWindow extends JFrame implements ActionListener {
         panel.add(resetButton,gbc);
 
 
-
+        panel.setBackground(Color.lightGray);
         // Add panel to frame
         add(panel);
 
@@ -140,6 +141,8 @@ public class PlayerWindow extends JFrame implements ActionListener {
                     }
                     else {
                         JOptionPane.showMessageDialog(null,"Player need at least 50 chips to play","Invalid Login",JOptionPane.ERROR_MESSAGE);
+
+                        passwordField.setText("");
                         playerFound = true;
 
                     }
@@ -147,6 +150,9 @@ public class PlayerWindow extends JFrame implements ActionListener {
             }
             if(!playerFound){
                 JOptionPane.showMessageDialog(null,"Invalid username or password!","Invalid Login",JOptionPane.ERROR_MESSAGE);
+
+                passwordField.setText("");
+
             }
             if(playerFound && hasEnoughChips){
                 dispose();

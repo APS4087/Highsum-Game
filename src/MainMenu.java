@@ -2,13 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.AccessFlag;
+
 import java.util.Scanner;
 
 // ** MAIN MENU TO RUN **
 public class MainMenu extends JFrame implements ActionListener {
 
-    private JLabel titleLabel;
     private JButton adminButton;
     private JButton playerButton;
 
@@ -17,16 +16,22 @@ public class MainMenu extends JFrame implements ActionListener {
         // Set up the JFrame
         super("Main menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(400, 200));
+        setPreferredSize(new Dimension(400, 250));
+
 
 
         // Create components
-        titleLabel = new JLabel("Welcome to Highsum Game!");
+        JLabel titleLabel = new JLabel("Welcome to Highsum Game!");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         adminButton = new JButton("Login as Admin");
         adminButton.setFocusable(false);
         playerButton = new JButton("Login as Player");
         playerButton.setFocusable(false);
+        JButton exitButton = new JButton("Exit");
+        exitButton.setFocusable(false);
+        // using lambda expression
+        exitButton.addActionListener(e -> System.exit(0));
+
 
         // Set up layout manager
         JPanel panel = new JPanel(new GridBagLayout());
@@ -39,7 +44,10 @@ public class MainMenu extends JFrame implements ActionListener {
         panel.add(adminButton, gbc);
         gbc.gridy = 2;
         panel.add(playerButton, gbc);
+        gbc.gridy = 3;
+        panel.add(exitButton, gbc);
 
+        panel.setBackground(Color.lightGray);
         // Add panel to frame
         add(panel);
 
@@ -91,5 +99,6 @@ public class MainMenu extends JFrame implements ActionListener {
             dispose();
             new PlayerWindow();
         }
+
     }
 }
