@@ -14,17 +14,18 @@ public class PlayerWindow extends JFrame implements ActionListener {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton resetButton;
-    private Dealer dealer = new Dealer();
+    private Dealer dealer;
     ArrayList<Player> players = (ArrayList<Player>) Player.getAllPlayers();
     private JList<String> playersJList;
 
 
-    Admin ad = new Admin();
-    PlayerWindow(){
+    private Admin ad = new Admin();
+    public PlayerWindow(){
         super("Player window");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(500, 400));
 
+        dealer = new Dealer();
         // Create components
         JLabel titleLabel = new JLabel("Player Login");
         titleLabel.setFont(new Font("Arial",Font.BOLD,24));
@@ -111,9 +112,7 @@ public class PlayerWindow extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new PlayerWindow();
-    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {

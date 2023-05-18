@@ -75,22 +75,24 @@ public class MainMenu extends JFrame implements ActionListener {
             dispose();
             JOptionPane.showMessageDialog(null,"Please proceed to console to access admin functions.");
             System.out.println("--------Welcome to admin portal---------");
-            boolean logIn = false;
-            do {
-                System.out.print("Enter password: ");
-                String password = scan.next();
-                scan.nextLine();
 
-                if (ad.checkAdminLogin(password)) {
-                    System.out.println("Login approved.....");
-                    logIn = true;
-                } else {
-                    System.out.println("Incorrect admin password");
-                    System.out.println();
-                }
-            } while (!logIn);
 
-            ad.adminMenu();
+            System.out.print("Enter password: ");
+            String password = scan.next();
+            scan.nextLine();
+
+            if (ad.checkAdminLogin(password)) {
+                System.out.println("Login approved.....");
+
+                ad.adminMenu();
+            } else {
+                System.out.println("Incorrect admin password");
+                System.out.println();
+                new MainMenu();
+            }
+
+
+
 
 
         }

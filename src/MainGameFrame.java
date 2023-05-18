@@ -264,6 +264,7 @@ public class MainGameFrame extends JFrame {
 
                     // 2ND ROUND AND ON WARDS
                     for (int i = 2; i < 5; i++) {
+
                         new DealingCardAnimation(this,1300);
                         dealer.dealCardTo(player);
                         dealer.dealCardTo(dealer);
@@ -298,8 +299,6 @@ public class MainGameFrame extends JFrame {
 
                             // Showing who won
                             gameResult(player,dealer);
-
-
 
 
                         }

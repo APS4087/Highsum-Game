@@ -79,7 +79,7 @@ public class Admin {
     // Admin menu
     public void adminMenu(){
         String input ="";
-        while (!input.equals("7")) {
+        while (!input.equals("8")) {
             System.out.println("\nAdmin Menu");
             System.out.println("1. Create a player");
             System.out.println("2. Delete a player");
@@ -87,7 +87,8 @@ public class Admin {
             System.out.println("4. Issue more chips to a player");
             System.out.println("5. Reset player’s password");
             System.out.println("6. Change administrator’s password");
-            System.out.println("7. Logout and go back to Main Menu");
+            System.out.println("7. View all player's password");
+            System.out.println("8. Logout and go back to Main Menu");
             System.out.println();
             System.out.print("Please select an option: ");
             input = scan.nextLine();
@@ -101,7 +102,8 @@ public class Admin {
                     case 4 -> issueChipsToPlayer();
                     case 5 -> resetPlayerPW();
                     case 6 -> changeAdminPW();
-                    case 7 -> new MainMenu();
+                    case 7 -> viewAllPlayerPasswords();
+                    case 8 -> new MainMenu();
 
                     default -> System.out.println("Invalid input. Please try again.");
                 }
@@ -184,6 +186,23 @@ public class Admin {
             String loginName = player.getLoginName();
             int chips = player.getChips();
             System.out.printf("|  %-19s|  %12d  |\n", loginName, chips);
+        }
+        System.out.println("+----------------------+----------------+");
+    }
+
+    // To view player and their password
+    public void viewAllPlayerPasswords() {
+
+        List<Player> players = Player.getAllPlayers();
+
+        System.out.println("+----------------------+----------------+");
+        System.out.println("|      Login Name      |   Password     |");
+        System.out.println("+----------------------+----------------+");
+
+        for (Player player : players) {
+            String loginName = player.getLoginName();
+            String password = player.getHashedPassword();
+            System.out.printf("|  %-19s|  %12s  |\n", loginName, password);
         }
         System.out.println("+----------------------+----------------+");
     }
@@ -322,6 +341,7 @@ public class Admin {
             System.out.println("Incorrect admin password. Going back to main menu.....");
         }
     }
+
 
     // Logout
     public void logout(){
